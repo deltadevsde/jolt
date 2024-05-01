@@ -50,4 +50,28 @@ impl Proof {
         let file = File::open(path.into())?;
         Ok(Proof::deserialize_compressed(file)?)
     }
+
+    pub fn serialize_to_string(&self) -> Result<String> {
+        let mut buffer = Vec::new();
+        self.serialize_compressed(&mut buffer)?;
+        Ok(base64::encode(&buffer))
+    }
+
+    pub fn deserialize_from_string(encoded: &str) -> Result<Self> {
+        let bytes = base64::decode(encoded)
+            .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidInput, e.to_string()))?;
+        let cursor = std::io::Cursor::new(bytes);
+        Ok(Proof::deserialize_compressed(cursor)?)
+    }
+
+    pub fn serialize_to_bytes(&self) -> Result<Vec<u8>> {
+        let mut buffer = Vec::new();
+        self.serialize_compressed(&mut buffer)?;
+        Ok(buffer)
+    }
+
+    pub fn deserialize_from_bytes(bytes: &[u8]) -> Result<Self> {
+        let cursor = std::io::Cursor::new(bytes);
+        Ok(Proof::deserialize_compressed(cursor)?)
+    }
 }
