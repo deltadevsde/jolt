@@ -6,7 +6,7 @@ const DTB_SIZE: usize = 0xfe0;
 
 extern crate fnv;
 
-use std::rc::Rc;
+use std::sync::Arc;
 
 use crate::trace::Tracer;
 use common::rv_trace::{JoltDevice, MemoryState};
@@ -40,7 +40,7 @@ pub struct Mmu {
     uart: Uart,
 
     pub jolt_device: JoltDevice,
-    tracer: Rc<Tracer>,
+    tracer: Arc<Tracer>,
 
     /// Address translation can be affected `mstatus` (MPRV, MPP in machine mode)
     /// then `Mmu` has copy of it.
@@ -93,7 +93,7 @@ impl Mmu {
     /// * `xlen`
     /// * `terminal`
     /// * `tracer`
-    pub fn new(xlen: Xlen, terminal: Box<dyn Terminal>, tracer: Rc<Tracer>) -> Self {
+    pub fn new(xlen: Xlen, terminal: Box<dyn Terminal>, tracer: Arc<Tracer>) -> Self {
         let mut dtb = vec![0; DTB_SIZE];
 
         // Load default device tree binary content
@@ -1036,11 +1036,11 @@ impl Mmu {
 /// using [`DRAM_BASE`](constant.DRAM_BASE.html) and accesses [`Memory`](../memory/struct.Memory.html).
 pub struct MemoryWrapper {
     memory: Memory,
-    tracer: Rc<Tracer>,
+    tracer: Arc<Tracer>,
 }
 
 impl MemoryWrapper {
-    fn new(tracer: Rc<Tracer>) -> Self {
+    fn new(tracer: Arc<Tracer>) -> Self {
         MemoryWrapper {
             memory: Memory::new(),
             tracer,

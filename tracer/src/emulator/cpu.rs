@@ -3,8 +3,8 @@
 extern crate fnv;
 
 use std::convert::TryInto;
-use std::rc::Rc;
 use std::str::FromStr;
+use std::sync::Arc;
 
 use crate::trace::Tracer;
 use common::rv_trace::*;
@@ -83,7 +83,7 @@ pub struct Cpu {
     _dump_flag: bool,
     decode_cache: DecodeCache,
     unsigned_data_mask: u64,
-    pub tracer: Rc<Tracer>,
+    pub tracer: Arc<Tracer>,
 }
 
 #[derive(Clone)]
@@ -228,7 +228,7 @@ impl Cpu {
     /// # Arguments
     /// * `Terminal`
     pub fn new(terminal: Box<dyn Terminal>) -> Self {
-        let tracer = Rc::new(Tracer::new());
+        let tracer = Arc::new(Tracer::new());
         let mut cpu = Cpu {
             clock: 0,
             xlen: Xlen::Bit64,
