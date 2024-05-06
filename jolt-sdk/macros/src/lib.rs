@@ -79,7 +79,7 @@ impl MacroBuilder {
 
     fn make_build_fn(&self) -> TokenStream2 {
         let fn_name = self.get_func_name();
-        let build_fn_name = Ident::new(&format!("buuild_{}", fn_name), fn_name.span());
+        let build_fn_name = Ident::new(&format!("build_{}", fn_name), fn_name.span());
         let prove_output_ty = self.get_prove_output_type();
 
         let input_names = self.func_args.iter().map(|(name, _)| name);
