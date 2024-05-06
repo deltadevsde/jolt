@@ -97,8 +97,8 @@ impl MacroBuilder {
             ) {
                 #imports
                 let (program, preprocessing) = #preprocess_fn_name();
-                let program = std::rc::Rc::new(program);
-                let preprocessing = std::rc::Rc::new(preprocessing);
+                let program = std::sync::Arc::new(program);
+                let preprocessing = std::sync::Arc::new(preprocessing);
 
                 let program_cp = program.clone();
                 let preprocessing_cp = preprocessing.clone();
